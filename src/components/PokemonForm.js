@@ -2,15 +2,29 @@ import React from 'react'
 import { Form } from 'semantic-ui-react'
 
 class PokemonForm extends React.Component {
-  constructor() {
-    super()
 
-    this.state = {
-      name: '',
-      hp: '',
-      frontUrl: '',
-      backUrl: ''
+  handleSubmit = event => {
+    const data = {
+      name: event.target.name.value,
+      stats: [{
+        value: event.target.hp.value,
+        name: "hp"
+      }],
+      sprites: {
+        front: event.target.frontUrl.value,
+        back: event.target.backUrl.value
+      }
     }
+    
+    fetch("http://localhost:3000/pokemon", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    })
+    .then(this.props.addPokemon(data))
   }
 
   render() {
